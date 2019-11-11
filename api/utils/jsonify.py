@@ -1,4 +1,4 @@
-def jsonify(records):
+def make_json(records):
     list_return = []
     for r in records:
         itens = r.items()
