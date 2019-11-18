@@ -1,6 +1,8 @@
 from asyncpg import create_pool, connect
 from sanic import Sanic
 from api import api
+import os
+
 
 app = Sanic(__name__)
 app.blueprint(api)
@@ -42,5 +44,5 @@ async def close_connection(app, loop):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000,
-            access_log=True, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
