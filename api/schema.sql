@@ -4,14 +4,14 @@ CREATE TABLE IF NOT EXISTS "user" (
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     password TEXT NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
     phone TEXT NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS "post" (
-    id serial PRIMARY KEY ,
+    id serial PRIMARY KEY,
     author_id INTEGER NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     title TEXT NOT NULL,
@@ -39,4 +39,4 @@ CREATE TABLE IF NOT EXISTS "favorite" (
     PRIMARY KEY (user_id, movie_id),
     FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (movie_id) REFERENCES "movie" (movie_id)
-)
+);
