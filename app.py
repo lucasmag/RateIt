@@ -1,10 +1,11 @@
-from asyncpg import create_pool, connect
+from sanic_cors import CORS, cross_origin
 from sanic import Sanic
 from api import api
 import os
 
 
 app = Sanic(__name__)
+CORS(app)
 app.blueprint(api)
 
 
