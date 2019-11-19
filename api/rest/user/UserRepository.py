@@ -1,13 +1,9 @@
-def get_users():
-    return 'select u.username from public.user u;'
+def get_user_by_id(user_id):
+    return 'select u.username from public.user u where u.id = {}'.format(user_id)
 
 
-def get_user_by_id(id):
-    return 'select u.username from public.user u where u.id = %d' % int(id)
-
-
-def get_followers_by_user_id(user_id):
-    return 'select f.follower_id from public.follower f where f.user_id = %d' % int(id)
+def get_followers_by_user_id(followed_id):
+    return 'select f.follower_id from public.follower f where f.followed_id = {}'.format(int(followed_id))
 
 
 def follow_user(follower_id, followed_id):
@@ -24,3 +20,4 @@ def new_user(req):
                                                                     req.get('last_name'), req.get('password'),
                                                                     req.get('email'),
                                                                     req.get('phone'), bool(req.get('is_active')))
+

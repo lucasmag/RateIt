@@ -33,9 +33,11 @@ CREATE TABLE IF NOT EXISTS "movie" (
     fav_count BIGINT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "favorite" (
+CREATE TABLE IF NOT EXISTS "watched_movies" (
     user_id INT NOT NULL,
     movie_id INT NOT NULL,
+    favorite BOOLEAN,
+    rate FLOAT,
     PRIMARY KEY (user_id, movie_id),
     FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (movie_id) REFERENCES "movie" (movie_id)

@@ -29,9 +29,9 @@ async def get_top_rated(request):
     return response.json(resp, status=200)
 
 
-@movies.route("/<id>/recomendados", methods=['GET'])
-async def get_recommendations(request, id):
-    resp = await service.get_recommendations_by_a_movie(id)
+@movies.route("/<movie_id>/recomendados", methods=['GET'])
+async def get_recommendations(request, movie_id):
+    resp = await service.get_recommendations_by_a_movie(movie_id)
     return response.json(resp, status=200)
 
 

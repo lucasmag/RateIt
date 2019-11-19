@@ -4,15 +4,6 @@ from api.rest.user import UserService as service
 users = Blueprint('users', url_prefix='/usuarios')
 
 
-def pool(request):
-    return request.app.config['pool']
-
-
-@users.route("/todos", methods=['GET'])
-async def get_users(request):
-    return await service.get_all_users(request)
-
-
 @users.route("/novo", methods=['POST'])
 async def create_user(request):
     return await service.create_user(request)
