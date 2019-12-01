@@ -35,5 +35,7 @@ async def get_recommendations(request, movie_id):
     return response.json(resp, status=200)
 
 
-
-
+@movies.route("/<movie_id>/avaliar", methods=['POST'])
+async def rate_movie(request, movie_id):
+    resp = await service.rate_movie(request, movie_id)
+    return response.json(resp, status=200)
