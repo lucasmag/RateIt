@@ -14,20 +14,33 @@ async def db_query(request, func):
         return response.json(jsonify.make_json(resp), status=200)
 
 
-async def synchronize_movies(movies):
+async def db(request, func):
+    async with request.app.config['pool'].acquire() as conn:
+        return await conn.fetch(func)
+
+
+async def synchronize_movies(request, movie):
     try:
-        return await db_query(movies, repository.sync_movie(movies.json()['results']))
+        await db_query(request, repository.new_movie(movie['id']))
+        votes = await db(request, repository.sync_movie(movie['id']))
+        return await subs_votes(movie, votes)
 
     except asyncpg.UniqueViolationError:
-        vote_count, vote_average = await db_query(movies, repository.sync_movie(movies.json()['results']))
-        for movie in movies.json(['results']):
-            movie['vote_count']
-            movie['vote_average']
+        votes = await db(request, repository.sync_movie(movie['id']))
+        return await subs_votes(movie, votes)
+
+
+async def subs_votes(movie, votes):
+    vote_count, vote_average = votes[0]['vote_count'], votes[0]['vote_average']
+    movie['vote_count'] = vote_count
+    movie['vote_average'] = vote_average
+    print(type(movie))
+    return response.json(movie, status=200)
 
 
 async def get_popular():
-    popular = requests.get(url.make(c.TMDB_BASE_URL, 'movie', first_id='popular'))
-    return await synchronize_movies(popular)
+    resp = requests.get(url.make(c.TMDB_BASE_URL, 'movie', first_id='popular'))
+    return resp.json()
 
 
 async def get_top_rated():
@@ -45,9 +58,10 @@ async def get_poster(movie_id):
     return c.IMAGE + '/' + movie['backdrop_path']
 
 
-async def get_movie_by_id(movie_id):
+async def get_movie_by_id(request, movie_id):
     resp = requests.get(url.make(c.TMDB_BASE_URL, 'movie', first_id=movie_id))
-    return resp.json()
+    new_resp = await synchronize_movies(request, resp.json())
+    return new_resp
 
 
 async def rate_movie(request, movie_id):

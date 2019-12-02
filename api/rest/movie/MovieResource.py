@@ -7,7 +7,7 @@ movies = Blueprint('movie', url_prefix='/filmes')
 
 @movies.route("/<movie_id>", methods=['GET'])
 async def get_movie_by_id(request, movie_id):
-    resp = await service.get_movie_by_id(movie_id)
+    resp = await service.get_movie_by_id(request, movie_id)
     return response.json(resp, status=200)
 
 
