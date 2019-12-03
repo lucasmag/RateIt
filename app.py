@@ -1,6 +1,7 @@
 from asyncpg import create_pool, connect
 from sanic import Sanic, response
 from sanic_auth import Auth
+from sanic_cors import CORS
 from api.rest.user.UserVO import User
 from api import api
 import os
@@ -10,6 +11,7 @@ app = Sanic(__name__)
 app.config.AUTH_LOGIN_ENDPOINT = 'login'
 app.blueprint(api)
 auth = Auth(app)
+CORS(app)
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
